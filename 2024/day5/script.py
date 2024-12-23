@@ -11,10 +11,11 @@ def process_input(path):
     return rules, updates
 
 
-def part_1(content, update_checker):
-    total = 0
-    rules, updates = content
+rules, updates = process_input("input.txt")
 
+
+def part_1(rules, updates, update_checker):
+    total = 0
     for update in updates:
         check = update_checker(rules, update)
         if check:
@@ -32,38 +33,36 @@ def correct_update(rules, update) -> bool:
             return False
     return True
 
-    # print(process_input("input.txt"))
-rules = [
-    (47, 53),
-    (97, 13),
-    (97, 61),
-    (97, 47),
-    (75, 29),
-    (61, 13),
-    (75, 53),
-    (29, 13),
-    (97, 29),
-    (53, 29),
-    (61, 53),
-    (97, 53),
-    (61, 29),
-    (47, 13),
-    (75, 47),
-    (97, 75),
-    (47, 61),
-    (75, 61),
-    (47, 29),
-    (75, 13),
-    (53, 13)
-]
 
-updates = [[75, 47, 61, 53, 29],
-           [97, 61, 53, 29, 13],
-           [75, 29, 13],
-           [75, 97, 47, 61, 53],
-           [61, 13, 29],
-           [97, 13, 75, 29, 47]
-           ]
+print(part_1(rules, updates, correct_update))
 
-content = process_input("input.txt")
-print(part_1(content, correct_update))
+# part 2
+
+
+def order(rules, update):
+    new_update = [0] * len(update)
+    cache = {}
+    for i, page in enumerate(update):
+        cache[page] = i
+    for _ in update:
+        for x, y in rules:
+            if x in cache and y in cache and not cache[x] < cache[y]:
+                cache[y], cache[x] = cache[x], cache[y]
+
+    for page, i in cache.items():
+        new_update[i] = page
+    return new_update
+
+
+def part_2(rules, updates, update_checker):
+    total = 0
+    for update in updates:
+        check = update_checker(rules, update)
+        if not check:
+            new_update = order(rules, update)
+            total += new_update[len(update) // 2]
+    return total
+
+
+rules, updates = process_input("input.txt")
+print(part_2(rules, updates, correct_update))
