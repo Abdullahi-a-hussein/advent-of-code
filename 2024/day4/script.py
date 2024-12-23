@@ -104,7 +104,29 @@ def count_neighbors(content, row, col):
 
 
 def count_neighbors_2(content, row, col):
-    pass
+    # we only need to get diagnol neighbors
+    col_ln = len(content[row])
+    ln = len(content)
+
+    # diagnol 1
+    up = row - 1
+    left = col - 1
+    down = row + 1
+    right = col + 1
+    found1 = ""
+    if up >= 0 and left >= 0:
+        found1 += content[up][left]
+    if down < ln and right < col_ln:
+        found1 += content[down][right]
+
+    found2 = ""
+    if down < ln and left >= 0:
+        found2 += content[down][left]
+    if up >= 0 and right < col_ln:
+        found2 += content[up][right]
+    if (found2 == "MS" or found2 == "SM") and (found1 == "MS" or found1 == "SM"):
+        return 1
+    return 0
 
 
 p = ["MMMSXXMASM",
@@ -119,4 +141,4 @@ p = ["MMMSXXMASM",
      "MXMXAXMASX",]
 
 problem_input = process_input("input.txt")
-print(part_1(problem_input, count_neighbors, "X"))
+print(part_1(problem_input, count_neighbors_2, "A"))
