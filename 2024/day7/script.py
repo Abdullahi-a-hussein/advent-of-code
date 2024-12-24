@@ -4,6 +4,7 @@
 from itertools import product
 # processing input to a workable format
 provided_operation = ["*", "+"]
+updated_operations = ["+", "*", "||"]
 
 
 def process_input(path):
@@ -43,14 +44,35 @@ def check_operation(test_value, expression):
     return len(valid_operations) > 0, valid_operations
 
 
-def total_calibration(calibration_equations):
+def total_calibration(calibration_equations, checker):
     total = 0
     for equation in calibration_equations:
         test_value, expression = equation
-        correct, operation = check_operation(test_value, expression)
+        correct, _ = checker(test_value, expression)
         if correct:
             total += test_value
     return total
 
 
-print(total_calibration(calibration_equations))
+# print(total_calibration(calibration_equations, check_operation))
+
+
+# Part 2
+
+
+def check_operation_2(test_value, expression):
+    operations = perform_operation(updated_operations, len(expression) - 1)
+    valid_operations = []
+    for operation in operations:
+        total = expression[0]
+        for index, val in enumerate(operation):
+            if val in provided_operation:
+                total = eval(f"{total}{val}{expression[index + 1]}")
+            else:
+                total = int(f"{total}{expression[index+1]}")
+        if total == test_value:
+            valid_operations.append(operation)
+    return len(valid_operations) > 0, valid_operations
+
+
+print(total_calibration(calibration_equations, check_operation_2))
