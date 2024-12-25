@@ -29,11 +29,13 @@ antenas, rows, cols = process_input("input.txt")
 # Part 1
 
 
+def dist(p1, p2): return (p2[0]-p1[0], p2[1]-p1[1])
+def add(x, y): return (x[0] + y[0], x[1] + y[1])
+def subtract(x, y): return (x[0] - y[0], x[1] - y[1])
+
+
 def find_antinodes(antenas, rows, cols):
     antinodes = set()
-    def dist(p1, p2): return (p2[0]-p1[0], p2[1]-p1[1])
-    def add(x, y): return (x[0] + y[0], x[1] + y[1])
-    def subtract(x, y): return (x[0] - y[0], x[1] - y[1])
     for loc in antenas.values():
         for i in range(len(loc)):
             for j in range(i + 1, len(loc)):
@@ -48,7 +50,25 @@ def find_antinodes(antenas, rows, cols):
     return len(antinodes)
 
 
-print(find_antinodes(antenas, rows, cols))
+# print(find_antinodes(antenas, rows, cols))
 
 
 # Part 2
+
+def find_antinodes_2(antenas, rows, cols):
+    antinodes = set()
+    for antena in antenas.values():
+        for i in range(len(antena)):
+            for j in range(len(antena)):
+                if i == j:
+                    continue
+                p, q = antena[i], antena[j]
+                d = dist(p, q)
+                while 0 <= p[0] < rows and 0 <= p[1] < cols:
+                    antinodes.add(p)
+                    p = subtract(p, d)
+
+    return len(antinodes)
+
+
+print(find_antinodes_2(antenas, rows, cols))

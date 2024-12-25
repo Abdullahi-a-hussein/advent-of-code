@@ -54,7 +54,7 @@ def total_calibration(calibration_equations, checker):
     return total
 
 
-# print(total_calibration(calibration_equations, check_operation))
+print(total_calibration(calibration_equations, check_operation))
 
 
 # Part 2
@@ -75,4 +75,5 @@ def check_operation_2(test_value, expression):
     return len(valid_operations) > 0, valid_operations
 
 
+# This takes awfully long time.
 print(total_calibration(calibration_equations, check_operation_2))
