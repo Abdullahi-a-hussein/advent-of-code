@@ -51,17 +51,34 @@ print(check_sum(disk_map))
 # Part 2
 
 def check_sum_2(disk_map):
-    new_disk = []
+    marker = []
+    new_disk = disk_map[:]
     ln = len(disk_map)
     i = 0
+    curr = disk_map[0]
     while i < ln:
         j = i
         while j < ln and disk_map[i] == disk_map[j]:
+            curr = disk_map[j]
             j += 1
 
-        new_disk.append((i, j))
+        marker.append([curr, [i, j - i]])
         i = j
-    print(new_disk)
+    end = ln(marker) - 1
+    while end > 0:
+        start = 0
+        while start < end:
+
+            # 1. end is  is not -1
+            # start is -1 and start ln is greater than end ln
+            # > go to  disk and swap element start[1][1] += 1 until end[1][1]
+            # > update marker at the given positions
+            # 1. if start end[1][1] == srart[1][1]
+            # swap marker[start], marker[end] = marker[end], marker[start]
+            # 2. if start is greater than end
+            # define new entry for [start[0], [end[1[0] + end[1][1]]
+            # start[0], start[1][0], start[1][1] = end[0], end[1][0], end[1][1]
+            pass
 
 
 check_sum_2(disk_map)
