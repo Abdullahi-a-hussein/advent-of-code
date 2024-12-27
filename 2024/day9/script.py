@@ -1,4 +1,4 @@
-path = "test.txt"
+path = "day9/test.txt"
 
 
 def process_input(path):
@@ -44,7 +44,7 @@ def check_sum(disk_map):
     return total
 
 
-print(disk_map)
+# print(disk_map)
 print(check_sum(disk_map))
 
 
@@ -64,21 +64,44 @@ def check_sum_2(disk_map):
 
         marker.append([curr, [i, j - i]])
         i = j
-    end = ln(marker) - 1
+    end = len(marker) - 1
+    moved = False
     while end > 0:
         start = 0
+        changes = []
+        moved = False
         while start < end:
+            if marker[end][0] == -1:
+                break
+            else:
+                if marker[start][0] == -1:
+                    l2 = marker[end][1][1]
+                    s1, l1 = marker[start][1][0], marker[start][1][1]
+                    if l2 < l1:
+                        part = [-1, [s1 + l2, l1 - l2]]
+                        # Collect changes instead of modifying in-place
+                        changes.append((start, end, part))
+                        moved = True
+                        break
+                    elif l2 == l1:
+                        # Collect swap as a change
+                        changes.append((start, end, None))
+                        break
+                start += 1
+        for change in changes:
+            s, e, part = change
 
-            # 1. end is  is not -1
-            # start is -1 and start ln is greater than end ln
-            # > go to  disk and swap element start[1][1] += 1 until end[1][1]
-            # > update marker at the given positions
-            # 1. if start end[1][1] == srart[1][1]
-            # swap marker[start], marker[end] = marker[end], marker[start]
-            # 2. if start is greater than end
-            # define new entry for [start[0], [end[1[0] + end[1][1]]
-            # start[0], start[1][0], start[1][1] = end[0], end[1][0], end[1][1]
-            pass
+            s1, s2 = marker[s][1][0], marker[e][1][0]
+            marker[s], marker[e] = marker[e], marker[s]
+            marker[s][1][0] = s1
+            marker[e][1][0] = s2
+            if part:
+                marker.insert(s + 1, part)
+        if moved:
+            end = len(marker) - 1
+            print(marker)
+        else:
+            end -= 1
 
 
 check_sum_2(disk_map)
