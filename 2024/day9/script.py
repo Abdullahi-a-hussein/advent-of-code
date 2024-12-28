@@ -1,4 +1,5 @@
-path = "day9/test.txt"
+from pprint import pprint
+path = "day9/input.txt"
 
 
 def process_input(path):
@@ -24,6 +25,7 @@ disk_map = process_input(path)
 # Part 1
 
 def check_sum(disk_map):
+
     new_disk = disk_map[:]
     i, j = 0, len(disk_map) - 1
     while i < j:
@@ -51,6 +53,7 @@ print(check_sum(disk_map))
 # Part 2
 
 def check_sum_2(disk_map):
+    answer = 0
     marker = []
     new_disk = disk_map[:]
     ln = len(disk_map)
@@ -86,6 +89,7 @@ def check_sum_2(disk_map):
                     elif l2 == l1:
                         # Collect swap as a change
                         changes.append((start, end, None))
+                        moved = True
                         break
                 start += 1
         for change in changes:
@@ -97,11 +101,18 @@ def check_sum_2(disk_map):
             marker[e][1][0] = s2
             if part:
                 marker.insert(s + 1, part)
+                marker[e+1][1][1] = marker[e + 1][1][1] - part[1][1]
+
         if moved:
             end = len(marker) - 1
-            print(marker)
         else:
+
             end -= 1
+    for item in marker:
+        if item[0] != -1:
+            for i in range(item[1][0], item[1][0] + item[1][1]):
+                answer += item[0] * i
+    return answer
 
 
-check_sum_2(disk_map)
+print(check_sum_2(disk_map))
