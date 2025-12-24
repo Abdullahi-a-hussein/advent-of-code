@@ -25,25 +25,31 @@ def part1(starting: int, rotations: list[str]) -> int:
     return count
 
 
-def part2(starting: int, rotations: list[int]) -> int:
+def part2(starting: int, rotations: list[str]) -> int:
+    right = "R"
+    left = "L"
     count = 0
     current = starting
     for entry in rotations:
-        rotation = int(entry[1:])
-        if entry[0] == "R":
-            current += rotation
-            if current > 100:
-                count += current // 100
-                current = current % 100
-        else:
-            current -= rotation
-            if current < 0:
-                if not (-current == rotation and rotation < 100):
-                    count += (100 - current) // 100
-                current = current % 100
-        if current == 0 or current == 100:
-            count += 1
+        distance = int(entry[1:])
+        direction = entry[0]
+        revolutions = distance // 100
+        if direction == right:
+            current += (distance % 100)
+            count += current // 100
             current %= 100
+        else:
+            step = distance % 100
+            d_target = current
+            if d_target != 0:
+                if step >= d_target:
+                    count += 1
+                    current = (100 - (step - d_target)) % 100
+                else:
+                    current -= step
+            else:
+                current = (100 - step) % 100
+        count += revolutions
     return count
 
 
